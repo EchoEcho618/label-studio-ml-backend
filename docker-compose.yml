@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  label-studio:
+    container_name: label-studio
+    image: heartexlabs/label-studio:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./mydata:/label-studio/data
+
+  ml-backend:
+    container_name: ml-backend
+    image: ml-backend
+    build:
+      # 修改后要重新构建镜像
+      # 同步修改environment.MODEL_DIR和volumes
+      context: ./pp_ocr_v4
+      args:
+        TEST_ENV: ${TEST_ENV}
+    environment:
+      # specify these parameters if you want to use basic auth for the model server
+      # - BASIC_AUTH_USER=
+      # - BASIC_AUTH_PASS=
+      # set the log level for the model server
+      - LOG_LEVEL=INFO
+      # any other parameters that you want to pass to the model server
+      - ANY=PARAMETER
+      # specify the number of workers and threads for the model server
+      # - WORKERS=1
+      # - THREADS=1
+      # specify the model directory (likely you don't need to change this)
+      - MODEL_DIR=/pp_ocr_v4/data/models
+
+      # Specify the Label Studio URL and API key to access
+      # uploaded, local storage and cloud storage files.
+      # Do not use 'localhost' as it does not work within Docker containers.
+      # Use prefix 'http://' or 'https://' for the URL always.
+      # Determine the actual IP using 'ifconfig' (Linux/Mac) or 'ipconfig' (Windows).
+      - LABEL_STUDIO_URL=http://192.168.5.9:8080
+      - LABEL_STUDIO_API_KEY=eb141eeda6121ff489fb82670e07f41c87985fa8
+    ports:
+      - "9090:9090"
+    volumes:
+      - "./pp_ocr_v4/data/server:/data"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - device_ids: [ "0" ]
+              capabilities: [ "gpu" ]
+              driver: "nvidia"
