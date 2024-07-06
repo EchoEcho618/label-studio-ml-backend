@@ -9,7 +9,7 @@ services:
     volumes:
       - ./mydata:/label-studio/data
     command: |
-      chmod -R 755 /label-studio/data && exec "$@"
+      chown -R 1001:1001 /label-studio/data && chmod -R 755 /label-studio/data && exec "$@"
 
   ml-backend:
     container_name: ml-backend
