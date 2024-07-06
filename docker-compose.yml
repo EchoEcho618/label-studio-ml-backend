@@ -8,6 +8,8 @@ services:
       - "8080:8080"
     volumes:
       - ./mydata:/label-studio/data
+    command: |
+      chmod -R 755 /label-studio/data && exec "$@"
 
   ml-backend:
     container_name: ml-backend
