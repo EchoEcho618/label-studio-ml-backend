@@ -1,7 +1,7 @@
 services:
   label-studio:
     container_name: label-studio
-    image: heartexlabs/label-studio:latest
+    image: heartexlabs/label-studio:1.13.1
     ports:
       - "8080:8080"
     volumes:
@@ -9,7 +9,7 @@ services:
 
   ml-backend:
     container_name: ml-backend
-    image: ml-backend
+    image: ml-backend:latest
     build:
       # 修改后要重新构建镜像
       # 同步修改environment.MODEL_DIR和volumes
