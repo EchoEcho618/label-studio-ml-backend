@@ -3,11 +3,14 @@ services:
     container_name: label-studio
     image: heartexlabs/label-studio:1.13.1
     environment:
+      - LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED=true
+      - LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT=/label-studio/files
       - DATA_UPLOAD_MAX_NUMBER_FILES=10000
     ports:
       - "8080:8080"
     volumes:
       - ./mydata:/label-studio/data
+      - ./myfiles:/label-studio/files
 
   ml-backend:
     container_name: ml-backend
