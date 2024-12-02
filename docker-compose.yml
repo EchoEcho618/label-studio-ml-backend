@@ -2,6 +2,8 @@ services:
   label-studio:
     container_name: label-studio
     image: heartexlabs/label-studio:1.13.1
+    environment:
+      - DATA_UPLOAD_MAX_NUMBER_FILES=10000
     ports:
       - "8080:8080"
     volumes:
